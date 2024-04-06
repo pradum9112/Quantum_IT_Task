@@ -160,7 +160,7 @@ const SignUpForm = () => {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formDOB">
-                  <Form.Label>Date of birth</Form.Label>
+                  <Form.Label className="text-white">Date of birth</Form.Label>
                   <Form.Control
                     type="date"
                     name="DOB"
