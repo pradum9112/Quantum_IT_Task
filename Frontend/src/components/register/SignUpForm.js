@@ -9,6 +9,8 @@ import axios from "axios";
 
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  // const [passwordValid, setpasswordValid] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,12 +37,37 @@ const SignUpForm = () => {
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+    if (e.target.name === "password") {
+      validatePassword(e.target.value);
+    }
+  };
+
+  const validatePassword = (password) => {
+    if (password === "") {
+      // setpasswordValid(false);
+      setError("");
+      return false;
+    }
+    const regex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    const isValid = regex.test(password);
+    // setpasswordValid(isValid);
+    setError(
+      isValid
+        ? "Correct Password"
+        : "Please provide password contain at least one letter, one number, and one special character, with a minimum of 8 characters"
+    );
+    return isValid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { name, DOB, email, password } = values;
+    if (!email.trim() || !password.trim() || !DOB.trim() || !password.trim()) {
+      console.log("All data required");
+      return;
+    }
 
     setLoading(false);
 
@@ -164,6 +191,7 @@ const SignUpForm = () => {
                   <Form.Control
                     type="date"
                     name="DOB"
+                    placeholder="Enter email"
                     value={values.DOB}
                     onChange={handleChange}
                   />
@@ -189,12 +217,31 @@ const SignUpForm = () => {
                     value={values.password}
                     onChange={handleChange}
                   />
-                  <Form.Text
-                    className="text-danger "
-                    style={{ fontSize: "small", color: "white" }}
+                  {/* <Form.Text
+                    className={
+                      passwordValid
+                        ? "text-success"
+                        : error
+                        ? "text-danger"
+                        : "text-warning"
+                    }
                   >
-                    Password must contain at least one letter, one number, and
-                    one special character (minimum 8 characters).
+                    {passwordValid
+                      ? "Correct password"
+                      : error ||
+                        "Password must contain at least one letter, one number, and one special character (minimum 8 characters)."}
+                  </Form.Text> */}
+                  <Form.Text
+                    className={
+                      error
+                        ? error === "Correct Password"
+                          ? "text-success"
+                          : "text-danger"
+                        : "text-warning"
+                    }
+                  >
+                    {error ||
+                      "Password must contain at least one letter, one number, and one special character (minimum 8 characters)."}
                   </Form.Text>
                 </Form.Group>
                 <div

@@ -31,6 +31,10 @@ const Login = () => {
     e.preventDefault();
 
     const { email, password } = values;
+    if (!email.trim() || !password.trim()) {
+      console.log("Email and password are required");
+      return;
+    }
 
     setLoading(true);
 
@@ -199,7 +203,7 @@ const Login = () => {
                 </Button>
 
                 <p className="mt-3" style={{ color: "#9d9494" }}>
-                  Don't Have an Account?{" "}
+                  Don't Have an Account?
                   <Link to="/register" className="text-white lnk">
                     Register
                   </Link>
