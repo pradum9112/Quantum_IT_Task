@@ -1,5 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormText,
+} from "react-bootstrap";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -94,45 +104,51 @@ const SignUpForm = () => {
                 Registration
               </h2>
               <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="formBasicName" className="mt-3">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
+                <FormGroup controlId="formBasicName" className="mt-3">
+                  <FormLabel className="text-white">Name</FormLabel>
+                  <FormControl
                     type="text"
                     name="name"
                     placeholder="Full name"
                     value={values.name}
                     onChange={handleChange}
                   />
-                </Form.Group>
-                <Form.Group className="mt-3" controlId="formDOB">
-                  <Form.Label>Date of birth</Form.Label>
-                  <Form.Control
+                </FormGroup>
+                <FormGroup className="mt-3 text-white" controlId="formDOB">
+                  <FormLabel>Date of birth</FormLabel>
+                  <FormControl
                     type="date"
                     name="DOB"
                     value={values.DOB}
                     onChange={handleChange}
                   />
-                </Form.Group>
-                <Form.Group controlId="formBasicEmail" className="mt-3">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
+                </FormGroup>
+                <FormGroup
+                  controlId="formBasicEmail"
+                  className="mt-3 text-white"
+                >
+                  <FormLabel>Email address</FormLabel>
+                  <FormControl
                     type="email"
                     name="email"
                     placeholder="Enter email"
                     value={values.email}
                     onChange={handleChange}
                   />
-                </Form.Group>
-                <Form.Group controlId="formBasicPassword" className="mt-3">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
+                </FormGroup>
+                <FormGroup
+                  controlId="formBasicPassword"
+                  className="mt-3 text-white"
+                >
+                  <FormLabel>Password</FormLabel>
+                  <FormControl
                     type="password"
                     name="password"
                     placeholder="Enter Password"
                     value={values.password}
                     onChange={handleChange}
                   />
-                  <Form.Text
+                  <FormText
                     className={
                       error
                         ? error === "Correct Password"
@@ -143,8 +159,8 @@ const SignUpForm = () => {
                   >
                     {error ||
                       "Password must contain at least one letter, one number, and one special character (minimum 8 characters require)."}
-                  </Form.Text>
-                </Form.Group>
+                  </FormText>
+                </FormGroup>
                 <div className="text-center">
                   <Button
                     type="submit"
