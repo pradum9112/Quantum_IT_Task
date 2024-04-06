@@ -159,7 +159,7 @@ const SignUpForm = () => {
                     onChange={handleChange}
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formDOB">
+                <Form.Group className="mt-3" controlId="formDOB">
                   <Form.Label className="text-white">Date of birth</Form.Label>
                   <Form.Control
                     type="date"
