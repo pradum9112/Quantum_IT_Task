@@ -175,12 +175,15 @@ const Login = () => {
                 <Col xs={12} md={6}>
                   <div className="d-flex justify-content-between flex-wrap">
                     <Link
-                      to="/forgotPassword"
+                      // to="/forgotPassword"
                       className="text-white lnk mr-md-3"
                     >
                       Remember me
                     </Link>
-                    <Link to="/forgotPassword" className="text-white lnk">
+                    <Link
+                      // to="/forgotPassword"
+                      className="text-white lnk"
+                    >
                       Forgot Password?
                     </Link>
                   </div>
