@@ -52,10 +52,9 @@ const SignUpForm = () => {
     });
 
     if (data && data.success === true) {
-      localStorage.setItem("user", JSON.stringify(data.user));
       console.log("successfully resister");
       setLoading(true);
-      navigate("/");
+      navigate("/login");
     } else {
       console.log("Failed to resister");
       setLoading(false);
