@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignInForm from "./components/login/SignInForm";
 import SignUpForm from "./components/register/SignUpForm";
 import TableData from "./components/tableData/TableData";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<TableData />} />
           <Route path="/login" element={<SignInForm />} />
           <Route path="/register" element={<SignUpForm />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
