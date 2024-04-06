@@ -7,7 +7,6 @@ const cors = require("cors");
 app.use(
   cors({
     origin: ["http://localhost:3000"],
-    // origin: ["https://note-book-crud-mern.vercel.app"],
     credentials: true,
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
