@@ -6,7 +6,8 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    // origin: ["http://localhost:3000"],
+    origin: ["https://quantum-it-task-jwwx.vercel.app"],
     credentials: true,
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
