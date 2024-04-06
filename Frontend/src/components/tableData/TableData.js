@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import SettingsIcon from "@mui/icons-material/Settings";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CircleIcon from "@mui/icons-material/Circle";
 import { Link, useNavigate } from "react-router-dom";
 
 const UserTable = () => {
@@ -63,8 +64,8 @@ const UserTable = () => {
   ];
 
   return (
-    <div className="container mt-5 ">
-      <Row className="justify-content-center">
+    <div className="container mt-5 rounded">
+      <Row className="justify-content-center rounded">
         <Col md={10}>
           <Table bordered className="shadow-lg">
             <thead>
@@ -94,16 +95,25 @@ const UserTable = () => {
                   </td>
                   <td>{user.dateCreated}</td>
                   <td>{user.role}</td>
-                  <td
-                    className={
-                      user.status === "Active"
-                        ? "text-success"
-                        : user.status === "Suspended"
-                        ? "text-warning"
-                        : "text-secondary"
-                    }
-                  >
-                    {user.status}
+                  <td>
+                    <Col className="d-flex align-items-center">
+                      <div className={`dot mx-1 `}>
+                        <CircleIcon
+                          className={
+                            user.status === "Active"
+                              ? "text-success"
+                              : user.status === "Suspended"
+                              ? "text-warning"
+                              : "text-secondary"
+                          }
+                          style={{
+                            width: "10px",
+                            height: "10px",
+                          }}
+                        />
+                      </div>
+                      <div>{user.status}</div>
+                    </Col>
                   </td>
                   <td>
                     <Button
@@ -114,7 +124,7 @@ const UserTable = () => {
                       <SettingsIcon />
                     </Button>
                     <Button variant="link" size="sm" className="text-danger">
-                      <HighlightOffIcon />
+                      <CancelIcon />
                     </Button>
                   </td>
                 </tr>
