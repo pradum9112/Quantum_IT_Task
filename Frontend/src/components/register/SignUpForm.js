@@ -1,16 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { Link, useNavigate } from "react-router-dom";
-import { registerAPI } from "../../utils/apiRequests";
 import axios from "axios";
+import { registerAPI } from "../../utils/apiRequests";
+import ParticlesBackground from "../ParticlesBackground";
 
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // const [passwordValid, setpasswordValid] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,15 +16,6 @@ const SignUpForm = () => {
       navigate("/");
     }
   }, [navigate]);
-
-  const particlesInit = useCallback(async (engine) => {
-    // console.log(engine);
-    await loadFull(engine);
-  }, []);
-
-  const particlesLoaded = useCallback(async (container) => {
-    // await console.log(container);
-  }, []);
 
   const [values, setValues] = useState({
     name: "",
@@ -44,14 +33,12 @@ const SignUpForm = () => {
 
   const validatePassword = (password) => {
     if (password === "") {
-      // setpasswordValid(false);
       setError("");
       return false;
     }
     const regex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     const isValid = regex.test(password);
-    // setpasswordValid(isValid);
     setError(
       isValid
         ? "Correct Password"
@@ -64,26 +51,30 @@ const SignUpForm = () => {
     e.preventDefault();
 
     const { name, DOB, email, password } = values;
-    if (!email.trim() || !password.trim() || !DOB.trim() || !password.trim()) {
-      console.log("All data required");
+    if (!name.trim() || !DOB.trim() || !email.trim() || !password.trim()) {
+      console.log("All fields are required");
       return;
     }
 
-    setLoading(false);
+    setLoading(true);
 
-    const { data } = await axios.post(registerAPI, {
-      name,
-      DOB,
-      email,
-      password,
-    });
+    try {
+      const { data } = await axios.post(registerAPI, {
+        name,
+        DOB,
+        email,
+        password,
+      });
 
-    if (data && data.success === true) {
-      console.log("successfully resister");
-      setLoading(true);
-      navigate("/login");
-    } else {
-      console.log("Failed to resister");
+      if (data && data.success) {
+        console.log("Successfully registered");
+        navigate("/login");
+      } else {
+        console.log("Failed to register");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -91,93 +82,20 @@ const SignUpForm = () => {
   return (
     <>
       <div style={{ position: "relative", overflow: "hidden" }}>
-        <Particles
-          id="tsparticles"
-          init={particlesInit}
-          loaded={particlesLoaded}
-          options={{
-            background: {
-              color: {
-                value: "#000",
-              },
-            },
-            fpsLimit: 60,
-            particles: {
-              number: {
-                value: 200,
-                density: {
-                  enable: true,
-                  value_area: 800,
-                },
-              },
-              color: {
-                value: "#ffcc00",
-              },
-              shape: {
-                type: "circle",
-              },
-              opacity: {
-                value: 0.5,
-                random: true,
-              },
-              size: {
-                value: 3,
-                random: { enable: true, minimumValue: 1 },
-              },
-              links: {
-                enable: false,
-              },
-              move: {
-                enable: true,
-                speed: 2,
-              },
-              life: {
-                duration: {
-                  sync: false,
-                  value: 3,
-                },
-                count: 0,
-                delay: {
-                  random: {
-                    enable: true,
-                    minimumValue: 0.5,
-                  },
-                  value: 1,
-                },
-              },
-            },
-            detectRetina: true,
-          }}
-          style={{
-            position: "absolute",
-            zIndex: -1,
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        />
+        <ParticlesBackground />
 
-        <Container
-          className="mt-5"
-          style={{
-            position: "relative",
-            zIndex: "2 !important",
-            color: "white !important",
-          }}
-        >
+        <Container className="mt-5" style={{ position: "relative", zIndex: 2 }}>
           <Row>
             <Col md={{ span: 6, offset: 3 }}>
               <h2 className="text-white text-center mt-5">
                 <AccountBalanceWalletIcon
                   sx={{ fontSize: 40, color: "white" }}
-                  className="text-center"
                 />
                 Registration
               </h2>
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formBasicName" className="mt-3">
-                  <Form.Label className="text-white">Name</Form.Label>
+                  <Form.Label>Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="name"
@@ -187,18 +105,16 @@ const SignUpForm = () => {
                   />
                 </Form.Group>
                 <Form.Group className="mt-3" controlId="formDOB">
-                  <Form.Label className="text-white">Date of birth</Form.Label>
+                  <Form.Label>Date of birth</Form.Label>
                   <Form.Control
                     type="date"
                     name="DOB"
-                    placeholder="Enter email"
                     value={values.DOB}
                     onChange={handleChange}
                   />
                 </Form.Group>
-
                 <Form.Group controlId="formBasicEmail" className="mt-3">
-                  <Form.Label className="text-white">Email address</Form.Label>
+                  <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
                     name="email"
@@ -207,9 +123,8 @@ const SignUpForm = () => {
                     onChange={handleChange}
                   />
                 </Form.Group>
-
                 <Form.Group controlId="formBasicPassword" className="mt-3">
-                  <Form.Label className="text-white">Password</Form.Label>
+                  <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="password"
                     name="password"
@@ -217,20 +132,6 @@ const SignUpForm = () => {
                     value={values.password}
                     onChange={handleChange}
                   />
-                  {/* <Form.Text
-                    className={
-                      passwordValid
-                        ? "text-success"
-                        : error
-                        ? "text-danger"
-                        : "text-warning"
-                    }
-                  >
-                    {passwordValid
-                      ? "Correct password"
-                      : error ||
-                        "Password must contain at least one letter, one number, and one special character (minimum 8 characters)."}
-                  </Form.Text> */}
                   <Form.Text
                     className={
                       error
@@ -241,35 +142,24 @@ const SignUpForm = () => {
                     }
                   >
                     {error ||
-                      "Password must contain at least one letter, one number, and one special character (minimum 8 characters)."}
+                      "Password must contain at least one letter, one number, and one special character (minimum 8 characters require)."}
                   </Form.Text>
                 </Form.Group>
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                  }}
-                  className="mt-4"
-                >
+                <div className="text-center">
                   <Button
                     type="submit"
-                    className=" text-center mt-3 btnStyle"
-                    onClick={!loading ? handleSubmit : null}
+                    className="mt-3 btnStyle"
                     disabled={loading}
                   >
                     {loading ? "Registering..." : "Signup"}
                   </Button>
-
-                  <p className="mt-3" style={{ color: "#9d9494" }}>
-                    Already have an account?{" "}
-                    <Link to="/login" className="text-white lnk">
-                      Login
-                    </Link>
-                  </p>
                 </div>
+                <p className="mt-3 text-center" style={{ color: "#9d9494" }}>
+                  Already have an account?
+                  <Link to="/login" className="text-white">
+                    Login
+                  </Link>
+                </p>
               </Form>
             </Col>
           </Row>

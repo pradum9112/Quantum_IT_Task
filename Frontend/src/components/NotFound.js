@@ -11,7 +11,7 @@ const NotFound = () => {
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center flex-column text-center"
+      className="d-flex justify-content-center align-items-center flex-column"
       style={{ minHeight: "100vh" }}
     >
       <h2>404 Not Found</h2>

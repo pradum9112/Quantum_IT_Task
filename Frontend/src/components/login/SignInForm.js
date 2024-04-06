@@ -1,16 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  FormControl,
+  FormGroup,
+  FormCheck,
+  FormLabel,
+} from "react-bootstrap";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { loginAPI } from "../../utils/apiRequests";
+import ParticlesBackground from "../ParticlesBackground";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
@@ -38,177 +48,92 @@ const Login = () => {
 
     setLoading(true);
 
-    const { data } = await axios.post(loginAPI, {
-      email,
-      password,
-    });
+    try {
+      const { data } = await axios.post(loginAPI, {
+        email,
+        password,
+      });
 
-    if (data.success === true) {
-      localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/");
-      console.log("successfully login");
-      setLoading(false);
-    } else {
-      console.log("Failed to login");
+      if (data.success) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/");
+      } else {
+        console.log("Failed to login");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
       setLoading(false);
     }
   };
 
-  const particlesInit = useCallback(async (engine) => {
-    // console.log(engine);
-    await loadFull(engine);
-  }, []);
-
-  const particlesLoaded = useCallback(async (container) => {
-    // await console.log(container);
-  }, []);
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
+  };
 
   return (
     <div style={{ position: "relative", overflow: "hidden" }}>
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        loaded={particlesLoaded}
-        options={{
-          background: {
-            color: {
-              value: "#000",
-            },
-          },
-          fpsLimit: 60,
-          particles: {
-            number: {
-              value: 200,
-              density: {
-                enable: true,
-                value_area: 800,
-              },
-            },
-            color: {
-              value: "#ffcc00",
-            },
-            shape: {
-              type: "circle",
-            },
-            opacity: {
-              value: 0.5,
-              random: true,
-            },
-            size: {
-              value: 3,
-              random: { enable: true, minimumValue: 1 },
-            },
-            links: {
-              enable: false,
-            },
-            move: {
-              enable: true,
-              speed: 2,
-            },
-            life: {
-              duration: {
-                sync: false,
-                value: 3,
-              },
-              count: 0,
-              delay: {
-                random: {
-                  enable: true,
-                  minimumValue: 0.5,
-                },
-                value: 1,
-              },
-            },
-          },
-          detectRetina: true,
-        }}
-        style={{
-          position: "absolute",
-          zIndex: -1,
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
-      <Container
-        className="mt-5"
-        style={{ position: "relative", zIndex: "2 !important" }}
-      >
+      <ParticlesBackground />
+      <Container className="mt-5" style={{ position: "relative", zIndex: 2 }}>
         <Row>
           <Col md={{ span: 6, offset: 3 }}>
-            <h2 className="text-white text-center ">
-              <AccountBalanceWalletIcon
-                sx={{ fontSize: 40, color: "white" }}
-                className="text-center"
-              />
+            <h2 className="text-white text-center">
+              <AccountBalanceWalletIcon sx={{ fontSize: 40, color: "white" }} />
               Login
             </h2>
-            <Form>
-              <Form.Group controlId="formBasicEmail" className="mt-3">
-                <Form.Label className="text-white">Email address</Form.Label>
-                <Form.Control
+            <Form onSubmit={handleSubmit}>
+              <FormGroup controlId="formBasicEmail" className="mt-3">
+                <FormLabel className="text-white">Email address</FormLabel>
+                <FormControl
                   type="email"
                   placeholder="Enter email"
                   name="email"
                   onChange={handleChange}
                   value={values.email}
                 />
-              </Form.Group>
+              </FormGroup>
 
-              <Form.Group controlId="formBasicPassword" className="mt-3">
-                <Form.Label className="text-white">Password</Form.Label>
-                <Form.Control
+              <FormGroup controlId="formBasicPassword" className="mt-3">
+                <FormLabel className="text-white">Password</FormLabel>
+                <FormControl
                   type="password"
                   name="password"
                   placeholder="Password"
                   onChange={handleChange}
                   value={values.password}
                 />
-              </Form.Group>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                }}
-                className="mt-4"
-              >
-                <Col xs={12} md={6}>
-                  <div className="d-flex justify-content-between flex-wrap">
-                    <Link
-                      // to="/forgotPassword"
-                      className="text-white lnk mr-md-3"
-                    >
-                      Remember me
-                    </Link>
-                    <Link
-                      // to="/forgotPassword"
-                      className="text-white lnk"
-                    >
-                      Forgot Password?
-                    </Link>
-                  </div>
-                </Col>
+              </FormGroup>
 
+              <div className="mt-4 d-flex justify-content-between">
+                <FormCheck
+                  type="checkbox"
+                  id="rememberMeCheckbox"
+                  className="text-white"
+                  label="Remember me"
+                  checked={rememberMe}
+                  onChange={handleRememberMeChange}
+                />
+                <Link to="/forgotPassword" className="text-white">
+                  Forgot Password?
+                </Link>
+              </div>
+
+              <div className="text-center">
                 <Button
                   type="submit"
-                  className=" text-center mt-3 btnStyle"
-                  onClick={!loading ? handleSubmit : null}
+                  className="mt-3 btnStyle "
                   disabled={loading}
                 >
-                  {loading ? "Signin…" : "Login"}
+                  {loading ? "Signing in…" : "Login"}
                 </Button>
-
-                <p className="mt-3" style={{ color: "#9d9494" }}>
-                  Don't Have an Account?
-                  <Link to="/register" className="text-white lnk">
-                    Register
-                  </Link>
-                </p>
               </div>
+
+              <p className="mt-3 text-center" style={{ color: "#9d9494" }}>
+                Don't Have an Account?
+                <Link to="/register" className="text-white">
+                  Register
+                </Link>
+              </p>
             </Form>
           </Col>
         </Row>
