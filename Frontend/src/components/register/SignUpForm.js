@@ -51,7 +51,7 @@ const SignUpForm = () => {
     const isValid = regex.test(password);
     setError(
       isValid
-        ? "Correct Password"
+        ? "Strong and valid Password"
         : "Please provide password contain at least one letter, one number, and one special character, with a minimum of 8 characters"
     );
     return isValid;
@@ -151,7 +151,7 @@ const SignUpForm = () => {
                   <FormText
                     className={
                       error
-                        ? error === "Correct Password"
+                        ? error === "Strong and valid Password"
                           ? "text-success"
                           : "text-danger"
                         : "text-warning"
